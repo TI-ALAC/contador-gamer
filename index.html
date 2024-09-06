@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Contador regresivo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.js"></script>
+</head>
+
+<body class="img">
+  <main>
+    <div id="contenido" class="content">
+      <img src="img/1.jpg" alt="Imagen promocional">
+      <!-- Contenedores de cuenta regresiva -->
+      <div class="countdown-group">
+        <!-- Contador 1 -->
+        <div class="countdown-container">
+          <div class="time-section">
+            <span class="time" id="days1">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="hours1">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="minutes1">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="seconds1">00</span>
+          </div>
+        </div>
+
+        <!-- Contador 2 -->
+        <div class="countdown-container" style="margin-left: 36px;">
+          <div class="time-section">
+            <span class="time" id="days2">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="hours2">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="minutes2">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="seconds2">00</span>
+          </div>
+        </div>
+
+        <!-- Contador 3 -->
+        <div class="countdown-container" style=" 
+        margin-left: 0px;
+    ">
+          <div class="time-section">
+            <span class="time" id="days3">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="hours3">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="minutes3">00</span>
+          </div>
+          <div class="time-section">
+            <span class="time" id="seconds3">00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const DATE_TARGET = new Date('09/16/2024 00:00 AM');
+
+      // Selección de contadores
+      const SPAN_DAYS_1 = document.querySelector('span#days1');
+      const SPAN_HOURS_1 = document.querySelector('span#hours1');
+      const SPAN_MINUTES_1 = document.querySelector('span#minutes1');
+      const SPAN_SECONDS_1 = document.querySelector('span#seconds1');
+
+      const SPAN_DAYS_2 = document.querySelector('span#days2');
+      const SPAN_HOURS_2 = document.querySelector('span#hours2');
+      const SPAN_MINUTES_2 = document.querySelector('span#minutes2');
+      const SPAN_SECONDS_2 = document.querySelector('span#seconds2');
+
+      const SPAN_DAYS_3 = document.querySelector('span#days3');
+      const SPAN_HOURS_3 = document.querySelector('span#hours3');
+      const SPAN_MINUTES_3 = document.querySelector('span#minutes3');
+      const SPAN_SECONDS_3 = document.querySelector('span#seconds3');
+
+      const MILLISECONDS_OF_A_SECOND = 1000;
+      const MILLISECONDS_OF_A_MINUTE = MILLISECONDS_OF_A_SECOND * 60;
+      const MILLISECONDS_OF_AN_HOUR = MILLISECONDS_OF_A_MINUTE * 60;
+      const MILLISECONDS_OF_A_DAY = MILLISECONDS_OF_AN_HOUR * 24;
+
+      function updateCountdown() {
+        const NOW = new Date();
+        const DURATION = DATE_TARGET - NOW;
+
+        const REMAINING_DAYS = Math.floor(DURATION / MILLISECONDS_OF_A_DAY);
+        const REMAINING_HOURS = Math.floor((DURATION % MILLISECONDS_OF_A_DAY) / MILLISECONDS_OF_AN_HOUR);
+        const REMAINING_MINUTES = Math.floor((DURATION % MILLISECONDS_OF_AN_HOUR) / MILLISECONDS_OF_A_MINUTE);
+        const REMAINING_SECONDS = Math.floor((DURATION % MILLISECONDS_OF_A_MINUTE) / MILLISECONDS_OF_A_SECOND);
+
+        // Actualizar todos los contadores
+        SPAN_DAYS_1.textContent = SPAN_DAYS_2.textContent = SPAN_DAYS_3.textContent = REMAINING_DAYS.toString().padStart(2, '0');
+        SPAN_HOURS_1.textContent = SPAN_HOURS_2.textContent = SPAN_HOURS_3.textContent = REMAINING_HOURS.toString().padStart(2, '0');
+        SPAN_MINUTES_1.textContent = SPAN_MINUTES_2.textContent = SPAN_MINUTES_3.textContent = REMAINING_MINUTES.toString().padStart(2, '0');
+        SPAN_SECONDS_1.textContent = SPAN_SECONDS_2.textContent = SPAN_SECONDS_3.textContent = REMAINING_SECONDS.toString().padStart(2, '0');
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, MILLISECONDS_OF_A_SECOND);
+    });
+  </script>
+</body>
+
+</html>
