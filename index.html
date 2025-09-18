@@ -1,118 +1,83 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Contador regresivo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+  <title>Countdown to November 12, 2025</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.js"></script>
 </head>
+<body>
+  <div class="billboard-container">
+    <img id="background-image" src="img/rest-of-days.png" alt="Background" class="background-img">
 
-<body class="img">
-  <main>
-    <div id="contenido" class="content">
-      <img src="img/1.jpg" alt="Imagen promocional">
-      <!-- Contenedores de cuenta regresiva -->
-      <div class="countdown-group">
-        <!-- Contador 1 -->
-        <div class="countdown-container">
-          <div class="time-section">
-            <span class="time" id="days1">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="hours1">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="minutes1">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="seconds1">00</span>
-          </div>
-        </div>
-
-        <!-- Contador 2 -->
-        <div class="countdown-container" style="margin-left: 36px;">
-          <div class="time-section">
-            <span class="time" id="days2">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="hours2">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="minutes2">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="seconds2">00</span>
-          </div>
-        </div>
-
-        <!-- Contador 3 -->
-        <div class="countdown-container" style=" 
-        margin-left: 0px;
-    ">
-          <div class="time-section">
-            <span class="time" id="days3">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="hours3">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="minutes3">00</span>
-          </div>
-          <div class="time-section">
-            <span class="time" id="seconds3">00</span>
-          </div>
-        </div>
+    <div class="countdown-display">
+      <div class="days-container">
+        <span id="days" class="days-number">00</span>
       </div>
     </div>
-  </main>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const DATE_TARGET = new Date('09/16/2024 00:00 AM');
+      // Target date: November 12, 2025 at midnight in timezone UTC-5
+      const TARGET_DATE = new Date('2025-11-12T05:00:00.000Z'); // 00:00 UTC-5 = 05:00 UTC
+      const daysElement = document.getElementById('days');
+      const backgroundImage = document.getElementById('background-image');
 
-      // Selección de contadores
-      const SPAN_DAYS_1 = document.querySelector('span#days1');
-      const SPAN_HOURS_1 = document.querySelector('span#hours1');
-      const SPAN_MINUTES_1 = document.querySelector('span#minutes1');
-      const SPAN_SECONDS_1 = document.querySelector('span#seconds1');
-
-      const SPAN_DAYS_2 = document.querySelector('span#days2');
-      const SPAN_HOURS_2 = document.querySelector('span#hours2');
-      const SPAN_MINUTES_2 = document.querySelector('span#minutes2');
-      const SPAN_SECONDS_2 = document.querySelector('span#seconds2');
-
-      const SPAN_DAYS_3 = document.querySelector('span#days3');
-      const SPAN_HOURS_3 = document.querySelector('span#hours3');
-      const SPAN_MINUTES_3 = document.querySelector('span#minutes3');
-      const SPAN_SECONDS_3 = document.querySelector('span#seconds3');
-
-      const MILLISECONDS_OF_A_SECOND = 1000;
-      const MILLISECONDS_OF_A_MINUTE = MILLISECONDS_OF_A_SECOND * 60;
-      const MILLISECONDS_OF_AN_HOUR = MILLISECONDS_OF_A_MINUTE * 60;
-      const MILLISECONDS_OF_A_DAY = MILLISECONDS_OF_AN_HOUR * 24;
+      const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 
       function updateCountdown() {
-        const NOW = new Date();
-        const DURATION = DATE_TARGET - NOW;
+        // Get current time in UTC and adjust to UTC-5 timezone
+        const now = new Date();
+        const localTime = new Date(now.getTime() - (5 * 60 * 60 * 1000)); // Subtract 5 hours for UTC-5
+        const timeDiff = TARGET_DATE - now;
 
-        const REMAINING_DAYS = Math.floor(DURATION / MILLISECONDS_OF_A_DAY);
-        const REMAINING_HOURS = Math.floor((DURATION % MILLISECONDS_OF_A_DAY) / MILLISECONDS_OF_AN_HOUR);
-        const REMAINING_MINUTES = Math.floor((DURATION % MILLISECONDS_OF_AN_HOUR) / MILLISECONDS_OF_A_MINUTE);
-        const REMAINING_SECONDS = Math.floor((DURATION % MILLISECONDS_OF_A_MINUTE) / MILLISECONDS_OF_A_SECOND);
+        if (timeDiff > 0) {
+          const daysRemaining = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
 
-        // Actualizar todos los contadores
-        SPAN_DAYS_1.textContent = SPAN_DAYS_2.textContent = SPAN_DAYS_3.textContent = REMAINING_DAYS.toString().padStart(2, '0');
-        SPAN_HOURS_1.textContent = SPAN_HOURS_2.textContent = SPAN_HOURS_3.textContent = REMAINING_HOURS.toString().padStart(2, '0');
-        SPAN_MINUTES_1.textContent = SPAN_MINUTES_2.textContent = SPAN_MINUTES_3.textContent = REMAINING_MINUTES.toString().padStart(2, '0');
-        SPAN_SECONDS_1.textContent = SPAN_SECONDS_2.textContent = SPAN_SECONDS_3.textContent = REMAINING_SECONDS.toString().padStart(2, '0');
+          // Format days: remove leading zero for single digits, keep 2 digits for 10-99, 3 digits for 100+
+          let formattedDays;
+          if (daysRemaining < 10) {
+            formattedDays = daysRemaining.toString(); // No leading zero for single digits
+          } else if (daysRemaining < 100) {
+            formattedDays = daysRemaining.toString().padStart(2, '0'); // Two digits for 10-99
+          } else {
+            formattedDays = daysRemaining.toString().padStart(3, '0'); // Three digits for 100+
+          }
+
+          daysElement.textContent = formattedDays;
+
+          // Move countdown position when it's the last day
+          const countdownDisplay = document.querySelector('.countdown-display');
+          if (daysRemaining === 1) {
+            // Move countdown to the left on last day
+            countdownDisplay.style.right = '20.5%'; // Move more to the left
+          } else if (daysRemaining < 10) {
+            countdownDisplay.style.right = '18.5%'; // Move more to the left
+          }
+
+          // Update background image based on days remaining
+          updateBackgroundImage(daysRemaining);
+        } else {
+          // Countdown finished
+          daysElement.textContent = '0';
+          backgroundImage.src = 'img/last-day.png'; // Show final image when countdown ends
+        }
       }
 
+      function updateBackgroundImage(days) {
+        // Simple image logic: last-day.png for 1 day left, rest-of-days.png for everything else
+        if (days === 1) {
+          backgroundImage.src = 'img/last-day.png';
+        } else {
+          backgroundImage.src = 'img/rest-of-days.png';
+        }
+      }
+
+      // Update immediately and then every minute for more precision
       updateCountdown();
-      setInterval(updateCountdown, MILLISECONDS_OF_A_SECOND);
+      setInterval(updateCountdown, 60000); // Update every minute
     });
   </script>
 </body>
-
 </html>
