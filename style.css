@@ -111,6 +111,24 @@ html, body {
     }
 }
 
+/* Billboard Resolution: 1920x768 */
+@media (min-width: 1920px) {
+    .countdown-display {
+        right: 16.5%;
+        top: 56%;
+        transform: translateY(-50%);
+    }
+
+    .days-number {
+        font-size: 220px;
+        line-height: 0.85;
+    }
+
+    .days-container {
+        gap: 0.8rem;
+    }
+}
+
 /* High contrast mode for better visibility */
 @media (prefers-contrast: high) {
     .days-number {
